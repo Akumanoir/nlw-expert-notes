@@ -4,7 +4,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { toast } from "sonner";
 
 interface newNoteCardProps {
-  onNoteCreated: (contet: string) => void
+  onNoteCreated: (contet: string) => void;
 }
 
 export function NewNoteCard({ onNoteCreated }: newNoteCardProps) {
@@ -28,9 +28,17 @@ export function NewNoteCard({ onNoteCreated }: newNoteCardProps) {
     console.log(content);
     event.preventDefault();
 
-    onNoteCreated(content)
+    if (content != "") {
+      onNoteCreated(content);
 
-    toast.success("Nota criada com Sucesso")
+      setContent("")
+
+      setShouldShowOnBoarding(true)
+
+      toast.success("Nota criada com Sucesso");
+    } else {
+      toast.error("Não há conteúdo na nota!");
+    }
   }
 
   return (
@@ -59,7 +67,7 @@ export function NewNoteCard({ onNoteCreated }: newNoteCardProps) {
                   .
                 </p>
               ) : (
-                <textarea autoFocus onChange={handleContentChange} className="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"></textarea>
+                <textarea autoFocus onChange={handleContentChange} value={content} className="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"></textarea>
               )}
             </div>
             <button type="submit" className="w-full bg-lime-400 py-4 text-center text-sm text-lime-950 outline-none font-medium hover:bg-lime-500">
