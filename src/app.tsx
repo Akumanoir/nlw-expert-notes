@@ -16,7 +16,7 @@ export function App() {
     const notesOnStorage = localStorage.getItem("notes");
 
     if (notesOnStorage) {
-      return JSON.parse(notesOnStorage)
+      return JSON.parse(notesOnStorage);
     }
 
     return [];
@@ -36,18 +36,28 @@ export function App() {
     localStorage.setItem("notes", JSON.stringify(notesArray));
   }
 
+  function onNoteDelete(id: string) {
+    const notesArray = notes.filter((note) => {
+      return note.id != id;
+    });
+
+    setNotes(notesArray);
+
+    localStorage.setItem("notes", JSON.stringify(notesArray));
+  }
+
   // para saber o tipo do evento: passe o mouse por cima do onChange ou evento que você está acionanddo na tag html que você quer acionar. E para o genérico<> o elemento que está recebendo o evento change
 
   function handleSearch(event: ChangeEvent<HTMLInputElement>) {
-    const query = event.target.value
+    const query = event.target.value;
 
-    setSearch(query)
+    setSearch(query);
   }
 
-  const filteredNotes = search != "" ? notes.filter(note => note.content.toLowerCase().includes(search.toLowerCase())) : notes
+  const filteredNotes = search != "" ? notes.filter((note) => note.content.toLowerCase().includes(search.toLowerCase())) : notes;
 
   return (
-    <div className="mx-auto max-w-6xl my-12 space-y-6">
+    <div className="mx-auto max-w-6xl my-12 space-y-6 px-5">
       <img src={logo} alt="logo da nlw expert" />
       <form className="w-full" action="">
         <input type="text" onChange={handleSearch} placeholder="Busque em suas notas..." name="" id="" className="w-full bg-transparent text-3xl font-semibold tracking-tight placeholder:text-slate-500 outline-none" />
@@ -55,10 +65,10 @@ export function App() {
 
       <div className="h-px bg-slate-700" />
 
-      <div className="grid grid-cols-3 auto-rows-[250px] gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] gap-6">
         <NewNoteCard onNoteCreated={onNoteCreated} />
         {filteredNotes.map((note) => {
-          return <NoteCard key={note.id} note={note} />;
+          return <NoteCard onNoteDelete={onNoteDelete} key={note.id} note={note} />;
         })}
       </div>
     </div>
